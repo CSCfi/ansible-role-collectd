@@ -36,7 +36,6 @@ collectd_plugins_memory:
 
 # Plugins definitions
 collectd_plugins_default: "{{
-  collectd_plugins_syslog +
   collectd_plugins_cpu +
   collectd_plugins_interface +
   collectd_plugins_load +
