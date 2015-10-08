@@ -10,3 +10,49 @@ collectd_tsdb_port: 4242
 collectd_network_server: False
 collectd_network_server_host: "{{ hostvars[groups['install'][0]]['ansible_hostname']  }}"
 collectd_network_listener: False
+
+# CPU plugin
+collectd_plugins_cpu:
+  - options:
+    - LoadPlugin: cpu
+
+
+# Interface plugin
+collectd_plugins_interface:
+  - options:
+    - LoadPlugin: interface
+
+
+# Load plugin
+collectd_plugins_load:
+  - options:
+    - LoadPlugin: load
+
+
+# Memory plugin
+collectd_plugins_memory:
+  - options:
+    - LoadPlugin: memory
+
+# Plugins definitions
+collectd_plugins_default: "{{
+  collectd_plugins_syslog +
+  collectd_plugins_cpu +
+  collectd_plugins_interface +
+  collectd_plugins_load +
+  collectd_plugins_memory
+}}"
+
+
+# Default list of custom global options
+collectd_global_options_custom: []
+
+# Default list of custom plugins
+collectd_plugins_custom: []
+
+collectd_config:
+  content: "{{
+    collectd_global_options_custom +
+    collectd_plugins_default +
+    collectd_plugins_custom
+  }}"
