@@ -16,7 +16,7 @@
     template: src=collectd.conf.j2 dest={{ collectd_conf_dir }}/collectd.conf owner=root mode=0644 backup=no
     register: collectd_config
 
-  - name: enable collectd
+  - name: enable and start collectd
     service: name=collectd state=started enabled=yes
 
   - name: restart collectd on configchange

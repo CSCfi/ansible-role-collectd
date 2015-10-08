@@ -1,7 +1,7 @@
 ansible-role-collectd
 =========
 
-Configures collectd
+Configures a collectd with a few roles
 
 Requirements
 ------------
