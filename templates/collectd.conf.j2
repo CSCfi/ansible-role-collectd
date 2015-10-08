@@ -41,7 +41,7 @@ LoadPlugin write_tsdb
        <Node>
                Host "{{ collectd_tsdb_host }}"
                Port "{{ collectd_tsdb_port }}"
-               HostTags "status=production domain={{ ansible_domain }} distribution={{ ansible_distribution }} dist_version={{ ansible_distribution_version }}"
+               HostTags "{{ collectd_tsdb_tags }}"
                StoreRates false
                AlwaysAppendDS false
        </Node>
