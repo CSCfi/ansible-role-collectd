@@ -15,6 +15,11 @@ Role Variables
 Dependencies
 ------------
 
+Some ideas borrowed from https://github.com/picotrading/ansible-collectd and that role uses the apache\_encoder\_macro.j2 from picotrading - 
+
+<pre>
+https://raw.githubusercontent.com/picotrading/config-encoder-macros/master/macros/apache_encode_macro.j2
+</pre>
 
 Example Playbook
 ----------------

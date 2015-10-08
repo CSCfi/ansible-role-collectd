@@ -50,7 +50,7 @@ LoadPlugin write_tsdb
 
 # https://github.com/picotrading/ansible-collectd/blob/master/templates/collectd.conf.j2
 
-{% from 'templates/encoder/macros/apache_encode_macro.j2' import apache_encode with context -%}
+{% from 'encoder/macros/apache_encode_macro.j2' import apache_encode with context -%}
 
 {{ apache_encode(
      collectd_config,
