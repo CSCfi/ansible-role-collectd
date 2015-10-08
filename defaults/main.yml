@@ -8,5 +8,5 @@ collectd_tsdb_writer: True
 collectd_tsdb_host: tsdb.host.example.com
 collectd_tsdb_port: 4242
 collectd_network_server: False
-collectd_network_server_host: {{ hostvars[groups['install'][0]]['ansible_hostname']  }}
+collectd_network_server_host: "{{ hostvars[groups['install'][0]]['ansible_hostname']  }}"
 collectd_network_listener: False
