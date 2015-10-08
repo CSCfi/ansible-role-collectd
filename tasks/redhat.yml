@@ -1,0 +1,24 @@
+---
+# tasks file for ansible-role-collectd
+#
+
+  - name: install EPEL
+    yum: name=epel-release state=present
+
+  - name: install collectd
+    yum: name=collectd state=present
+
+  - name: install collectd_plugin_packages
+    yum: name={{ item }} state=present
+    with_items: collectd_plugin_packages
+
+  - name: template in collectd.d/collectd.conf
+    template: src=collectd.conf.j2 dest={{ collectd_conf_dir }}/collectd.conf owner=root mode=0644 backup=no
+    register: collectd_config
+
+  - name: enable collectd
+    service: name=collectd state=started enabled=yes
+
+  - name: restart collectd on configchange
+    service: name=collectd state=restarted
+    when: collectd_config.changed

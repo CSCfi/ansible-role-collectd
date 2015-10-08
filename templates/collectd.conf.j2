@@ -1,0 +1,49 @@
+# {{ ansible_managed }}
+##
+CollectInternalStats true
+Interval 60
+
+{% if collectd_listener %}
+# The network plugin receives metrics from *
+LoadPlugin network
+<Plugin network>
+    <Listen "0.0.0.0" "25826">
+    </Listen>
+    <Listen "::" "25826">
+    </Listen>
+
+#   MaxPacketSize 1024
+#
+#   # proxy setup (client and server as above):
+#   Forward true
+#
+#   # statistics about the network plugin itself
+    ReportStats true
+#
+#   # "garbage collection"
+#   CacheFlush 1800
+</Plugin>
+{% endif %}
+
+{% if collectd_server %}
+# The network plugin ships metrics to *
+LoadPlugin network
+<Plugin network>
+    <Server "{{ collectd_network_server_host }}" "25826">
+    </Server>
+</Plugin>
+{% endif %}
+
+{% if collectd_tsdb_writer %}
+# This write_tsdb plugin writes to influxdb
+LoadPlugin write_tsdb
+<Plugin write_tsdb>
+       <Node>
+               Host "{{ collectd_tsdb_host }}"
+               Port "{{ collectd_tsdb_port }}"
+               HostTags "status=production domain={{ ansible_domain }} distribution={{ ansible_distribution }} dist_version={{ ansible_distribution_version }}"
+               StoreRates false
+               AlwaysAppendDS false
+       </Node>
+</Plugin>
+{% endif %}
