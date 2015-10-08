@@ -3,7 +3,7 @@
 CollectInternalStats true
 Interval 60
 
-{% if collectd_listener %}
+{% if collectd_network_listener %}
 # The network plugin receives metrics from *
 LoadPlugin network
 <Plugin network>
@@ -25,7 +25,7 @@ LoadPlugin network
 </Plugin>
 {% endif %}
 
-{% if collectd_server %}
+{% if collectd_network_server %}
 # The network plugin ships metrics to *
 LoadPlugin network
 <Plugin network>
