@@ -34,6 +34,53 @@ LoadPlugin network
 </Plugin>
 {% endif %}
 
+{% if collectd_plugins_aggregation %}
+<Plugin "aggregation">
+    {% if collectd_plugins_cpu %}
+    <Aggregation>
+        # Aggregate all local CPUs values.
+        Plugin "cpu"
+        Type "cpu"
+        GroupBy "Host"
+        GroupBy "TypeInstance"
+        CalculateNum false
+        CalculateSum false
+        CalculateAverage true
+        CalculateMinimum true
+        CalculateMaximum true
+        CalculateStddev false
+    </Aggregation>
+    {% endif %}
+    {% if collectd_plugins_cpufreq %}
+    <Aggregation>
+        # Aggregate all local cpufreq values.
+        Plugin "cpufreq"
+        Type "cpufreq"
+        GroupBy "Host"
+        CalculateNum false
+        CalculateSum false
+        CalculateAverage true
+        CalculateMinimum true
+        CalculateMaximum true
+        CalculateStddev false
+    </Aggregation>
+    {% endif %}
+</Plugin>
+{% endif %}
+
+{% if collectd_plugins_interface %}
+<Plugin interface>
+   Interface "lo"
+   IgnoreSelected true
+</Plugin>
+{% endif %}
+
+{% if collectd_plugins_processes %}
+<Plugin processes>
+   Process "slurmstepd"
+</Plugin>
+{% endif %}
+
 {% if collectd_tsdb_writer %}
 # This write_tsdb plugin writes to influxdb
 LoadPlugin write_tsdb
@@ -57,3 +104,167 @@ LoadPlugin write_tsdb
      convert_bools=true,
      convert_nums=true,
      quote_all_strings=true) }}
+
+####### Chains
+
+LoadPlugin match_regex
+LoadPlugin target_replace
+
+{% if collectd_plugins_processes %}
+PreCacheChain "PreCache"
+<Chain "PreCache">
+    <Rule "no_fork_rate">
+        # collectd.processes.fork_rate
+        <Match "regex">
+            Plugin "processes"
+        </Match>
+        <Match "regex">
+            Type "fork_rate"
+        </Match>
+        Target "stop"
+    </Rule>
+    <Rule "no_ps_code">
+        # collectd.processes-slurmstepd.ps_code
+        <Match "regex">
+            Plugin "processes"
+        </Match>
+        <Match "regex">
+            Type "ps_code"
+        </Match>
+        Target "stop"
+    </Rule>
+    <Rule "no_ps_data">
+        # collectd.processes-slurmstepd.ps_data
+        <Match "regex">
+            Plugin "processes"
+        </Match>
+        <Match "regex">
+            Type "ps_data"
+        </Match>
+        Target "stop"
+    </Rule>
+    <Rule "no_ps_vm">
+        # collectd.processes-slurmstepd.ps_vm
+        <Match "regex">
+            Plugin "processes"
+        </Match>
+        <Match "regex">
+            Type "ps_vm"
+        </Match>
+        Target "stop"
+    </Rule>
+    <Rule "no_ps_stacksize">
+        # collectd.processes-slurmstepd.ps_stacksize
+        <Match "regex">
+            Plugin "processes"
+        </Match>
+        <Match "regex">
+            Type "ps_stacksize"
+        </Match>
+        Target "stop"
+    </Rule>
+    <Rule "no_ps_rss">
+        # collectd.processes-slurmstepd.ps_rss
+        <Match "regex">
+            Plugin "processes"
+        </Match>
+        <Match "regex">
+            Type "ps_rss"
+        </Match>
+        Target "stop"
+    </Rule>
+    <Rule "no_pagefaults_">
+        # collectd.processes-slurmstepd.ps_pagefaults.minflt
+        <Match "regex">
+            Plugin "processes"
+        </Match>
+        <Match "regex">
+            Type ".minflt"
+        </Match>
+        Target "stop"
+    </Rule>
+    <Rule "no_pagefaults_">
+        # collectd.processes-slurmstepd.ps_pagefaults.maxflt
+        <Match "regex">
+            Plugin "processes"
+        </Match>
+        <Match "regex">
+            Type "ps_pagefaults"
+        </Match>
+        Target "stop"
+    </Rule>
+    <Rule "no_ps_states_">
+        # collectd.processes.ps_state.*
+        <Match "regex">
+            Plugin "processes"
+        </Match>
+        <Match "regex">
+            Type ".*ps_state.*"
+        </Match>
+        Target "stop"
+    </Rule>
+    <Rule "no_disk2">
+        # collectd.processes-slurmstepd.ps_disk_octets.write
+        <Match "regex">
+            Plugin "processes"
+        </Match>
+        <Match "regex">
+            Type "ps_disk_octets"
+        </Match>
+        Target "stop"
+    </Rule>
+    <Rule "no_disk3">
+        # collectd.processes-slurmstepd.ps_disk_ops.write
+        <Match "regex">
+            Plugin "processes"
+        </Match>
+        <Match "regex">
+            Type "ps_disk_ops"
+        </Match>
+        Target "stop"
+    </Rule>
+    <Rule "no_cpu">
+        # collectd.processes-slurmstepd.ps_cputime
+        <Match "regex">
+            Plugin "processes"
+        </Match>
+        <Match "regex">
+            Type "ps_cputime"
+        </Match>
+        Target "stop"
+    </Rule>
+</Chain>
+{% endif %}
+
+{% if collectd_plugins_aggregation and collectd_plugins_cpu %}
+PostCacheChain "PostCache"
+<Chain "PostCache">
+    {% if collectd_plugins_cpu %}
+    <Rule>
+        <Match "regex">
+            Plugin "^cpu$"
+        </Match>
+        <Target "write">
+            Plugin "aggregation"
+        </Target>
+        Target "stop"
+    </Rule>
+    {% endif %}
+    {% if collectd_plugins_cpufreq %}
+    <Rule>
+        <Match "regex">
+            Plugin "^cpufreq$"
+        </Match>
+        <Target "write">
+            Plugin "aggregation"
+        </Target>
+        Target "stop"
+    </Rule>
+    {% endif %}
+    # Pass all other local values as they are.
+    <Target write>
+        Plugin "network"
+    </Target>
+</Chain>
+{% endif %}
+

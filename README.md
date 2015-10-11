@@ -11,6 +11,7 @@ Requirements
 Role Variables
 --------------
 
+Example for how to add more plugins and how to configure them when using the apache encoder style.
 
 Dependencies
 ------------
