@@ -265,7 +265,8 @@ PostCacheChain "PostCache"
     {% endif %}
     # Pass all other local values as they are.
     <Target write>
-        Plugin "network"
+	# https://collectd.org/wiki/index.php/Plugin:Write_TSDB
+        Plugin "write_tsdb/{{ collectd_tsdb_host }}/{{ collectd_tsdb_port }}"
     </Target>
 </Chain>
 {% endif %}
