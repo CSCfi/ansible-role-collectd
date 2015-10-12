@@ -101,7 +101,7 @@ LoadPlugin write_tsdb
                Host "{{ collectd_tsdb_host }}"
                Port "{{ collectd_tsdb_port }}"
                HostTags "{{ collectd_tsdb_tags }}"
-               StoreRates false
+               StoreRates true
                AlwaysAppendDS false
        </Node>
 </Plugin>
