@@ -3,6 +3,18 @@
 CollectInternalStats true
 Interval 60
 
+###
+{% from 'encoder/macros/apache_encode_macro.j2' import apache_encode with context -%}
+{# This encoder was taken from
+# https://github.com/picotrading/ansible-collectd/blob/master/templates/collectd.conf.j2 #}
+
+{{ apache_encode(
+     collectd_config,
+     convert_bools=true,
+     convert_nums=true,
+     quote_all_strings=true) }}
+###
+
 {% if collectd_network_listener %}
 # The network plugin receives metrics from *
 LoadPlugin network
@@ -94,16 +106,6 @@ LoadPlugin write_tsdb
        </Node>
 </Plugin>
 {% endif %}
-
-{% from 'encoder/macros/apache_encode_macro.j2' import apache_encode with context -%}
-{# This encoder was taken from
-# https://github.com/picotrading/ansible-collectd/blob/master/templates/collectd.conf.j2 #}
-
-{{ apache_encode(
-     collectd_config,
-     convert_bools=true,
-     convert_nums=true,
-     quote_all_strings=true) }}
 
 ####### Chains
 
