@@ -32,8 +32,17 @@
     yum: name=ipmitool state=present
     when: ansible_virtualization_role != "guest" and collectd_ipmitool
 
+  - name: drop some collectd excessive message by rsyslog
+    template: src=rsyslog_drop.conf dest=/etc/rsyslog.d/rsyslog_drop.conf owner=root mode=0644 backup=no
+    register: collectd_rsyslog_drop
+    when: ansible_virtualization_role != "guest" and collectd_ipmitool
+
   - name: enable and start collectd
     service: name=collectd state=started enabled=yes
+
+  - name: restart rsyslog if collectd_rsyslog_drop changed
+    service: name=rsyslog state=restarted
+    when: collectd_rsyslog_drop.changed
 
   - name: restart collectd on configchange
     service: name=collectd state=restarted
