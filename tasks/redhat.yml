@@ -33,7 +33,7 @@
     when: ansible_virtualization_role != "guest" and collectd_ipmitool
 
   - name: drop some collectd excessive message by rsyslog
-    template: src=rsyslog_drop.conf dest=/etc/rsyslog.d/rsyslog_drop.conf owner=root mode=0644 backup=no
+    template: src=rsyslog_drop.conf dest=/etc/rsyslog.d/10_rsyslog_drop.conf owner=root mode=0644 backup=no
     register: collectd_rsyslog_drop
     when: ansible_virtualization_role != "guest" and collectd_ipmitool
 
