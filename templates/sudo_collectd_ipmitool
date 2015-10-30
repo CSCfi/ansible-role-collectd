@@ -1,0 +1,3 @@
+# {{ ansible_managed }}
+Defaults:nobody !requiretty
+nobody ALL=NOPASSWD: /usr/bin/ipmitool

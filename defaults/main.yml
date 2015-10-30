@@ -11,7 +11,7 @@ collectd_tsdb_tags: "status=production domain={{ ansible_domain }} distribution=
 collectd_network_server: False
 collectd_network_server_host: "{{ hostvars[groups['install'][0]]['ansible_hostname']  }}"
 collectd_network_listener: False
-
+collectd_ipmitool: True
 
 # Aggregation plugin
 collectd_plugins_aggregation:

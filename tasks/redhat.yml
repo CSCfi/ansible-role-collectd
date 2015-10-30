@@ -17,12 +17,20 @@
     register: collectd_config
 
   - name: install the ipmitool.sh on non guest hosts
-    get_url: url=https://raw.githubusercontent.com/lunetics/collectd-plugins/32d751ed913b1e1d84bf78a4848648fb63379689/ipmitool/ipmitool.sh dest=/usr/local/bin/ipmitool.sh owner=nobody group=nobody mode=0755 backup=yes
-    when: ansible_virtualization_role != "guest"
+    get_url: owner=nobody group=nobody mode=0755 backup=yes url=https://raw.githubusercontent.com/lunetics/collectd-plugins/32d751ed913b1e1d84bf78a4848648fb63379689/ipmitool/ipmitool.sh dest=/usr/local/bin/ipmitool.sh
+    when: ansible_virtualization_role != "guest" and collectd_ipmitool
+
+  - name: set permissions on ipmitool.sh
+    file: path=/usr/local/bin/ipmitool.sh owner=nobody group=nobody mode=0755
+    when: ansible_virtualization_role != "guest" and collectd_ipmitool
+
+  - name: add sudoers rule for ipmitool
+    template: src=sudo_collectd_ipmitool dest=/etc/sudoers.d/sudo_collectd_ipmitool owner=root group=root mode=0640
+    when: ansible_virtualization_role != "guest" and collectd_ipmitool
 
   - name: install ipmitool if virtualization role is not guest
     yum: name=ipmitool state=present
-    when: ansible_virtualization_role != "guest"
+    when: ansible_virtualization_role != "guest" and collectd_ipmitool
 
   - name: enable and start collectd
     service: name=collectd state=started enabled=yes
