@@ -20,6 +20,10 @@
     get_url: url=https://raw.githubusercontent.com/lunetics/collectd-plugins/32d751ed913b1e1d84bf78a4848648fb63379689/ipmitool/ipmitool.sh dest=/usr/local/bin/ipmitool.sh owner=nobody group=nobody mode=0755 backup=yes
     when: ansible_virtualization_type != "kvm"
 
+  - name: install ipmitool if virtualization type is not KVM
+    yum: name=ipmitool state=present
+    when: ansible_virtualization_type != "kvm"
+
   - name: enable and start collectd
     service: name=collectd state=started enabled=yes
 
