@@ -93,6 +93,15 @@ LoadPlugin network
 </Plugin>
 {% endif %}
 
+# If not a VM
+{% if collectd_plugins_exec %}
+  {% if ansible_virtualization_type != "kvm" %}
+  <Plugin exec>
+  	Exec "nobody" "/usr/local/bin/ipmitool.sh"
+  </Plugin>
+  {% endif %}
+{% endif %}
+
 {% if collectd_tsdb_writer %}
 # This write_tsdb plugin writes to influxdb
 LoadPlugin write_tsdb
@@ -242,32 +251,32 @@ PreCacheChain "PreCache"
 PostCacheChain "PostCache"
 <Chain "PostCache">
     {% if collectd_plugins_cpu %}
-    <Rule>
-        <Match "regex">
-            Plugin "^cpu$"
-        </Match>
-        <Target "write">
-            Plugin "aggregation"
-        </Target>
-        Target "stop"
-    </Rule>
+        <Rule>
+            <Match "regex">
+                Plugin "^cpu$"
+            </Match>
+            <Target "write">
+                Plugin "aggregation"
+            </Target>
+            Target "stop"
+        </Rule>
     {% endif %}
     {% if collectd_plugins_cpufreq %}
-    <Rule>
-        <Match "regex">
-            Plugin "^cpufreq$"
-        </Match>
-        <Target "write">
-            Plugin "aggregation"
-        </Target>
-        Target "stop"
-    </Rule>
+        <Rule>
+            <Match "regex">
+                Plugin "^cpufreq$"
+            </Match>
+            <Target "write">
+                Plugin "aggregation"
+            </Target>
+            Target "stop"
+        </Rule>
     {% endif %}
-    # Pass all other local values as they are.
-    <Target write>
-	# https://collectd.org/wiki/index.php/Plugin:Write_TSDB
-        Plugin "write_tsdb/{{ collectd_tsdb_host }}/{{ collectd_tsdb_port }}"
-    </Target>
+        # Pass all other local values as they are.
+        <Target write>
+	    # https://collectd.org/wiki/index.php/Plugin:Write_TSDB
+            Plugin "write_tsdb/{{ collectd_tsdb_host }}/{{ collectd_tsdb_port }}"
+        </Target>
 </Chain>
 {% endif %}
 
