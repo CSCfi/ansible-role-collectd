@@ -16,13 +16,13 @@
     template: src=collectd.conf.j2 dest={{ collectd_conf_dir }}/collectd.conf owner=root mode=0644 backup=no
     register: collectd_config
 
-  - name: install the ipmitool.sh on non-virtualized hosts
+  - name: install the ipmitool.sh on non guest hosts
     get_url: url=https://raw.githubusercontent.com/lunetics/collectd-plugins/32d751ed913b1e1d84bf78a4848648fb63379689/ipmitool/ipmitool.sh dest=/usr/local/bin/ipmitool.sh owner=nobody group=nobody mode=0755 backup=yes
-    when: ansible_virtualization_type != "kvm"
+    when: ansible_virtualization_role != "guest"
 
-  - name: install ipmitool if virtualization type is not KVM
+  - name: install ipmitool if virtualization role is not guest
     yum: name=ipmitool state=present
-    when: ansible_virtualization_type != "kvm"
+    when: ansible_virtualization_role != "guest"
 
   - name: enable and start collectd
     service: name=collectd state=started enabled=yes
