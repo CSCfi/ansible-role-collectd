@@ -95,10 +95,10 @@ LoadPlugin network
 
 {% if collectd_plugins_exec %}
   {% if ansible_virtualization_role != "guest" %}
-  # If not a VM
-  <Plugin exec>
-  	Exec "nobody" "/usr/local/bin/ipmitool.sh"
-  </Plugin>
+# If not a VM
+<Plugin exec>
+	Exec "nobody" "/usr/local/bin/ipmitool.sh"
+</Plugin>
   {% endif %}
 {% endif %}
 
