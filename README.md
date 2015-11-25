@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/CSC-IT-Center-for-Science/ansible-role-collectd.svg)](https://travis-ci.org/CSC-IT-Center-for-Science/ansible-role-collectd)
 ansible-role-collectd
 =========
 
