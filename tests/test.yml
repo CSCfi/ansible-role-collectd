@@ -2,7 +2,8 @@
 
  - hosts: localhost
    remote_user: root
-   vars:
-     - ansible_service_mgr: systemctl
    roles:
      - ansible-role-collectd
+   pre_tasks:
+     - name: set ansible_service_mgr
+       set_fact: ansible_service_mgr=systemd
