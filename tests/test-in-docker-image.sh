@@ -56,7 +56,9 @@ rm -Rf ansible
 git clone https://github.com/ansible/ansible --recursive ||(echo "Could not clone ansible from Github" && exit 2 )
 cd ansible
 # checking out this commit because some errors after 2015-11-05
-git checkout 07d0d2720c73816e1206882db7bc856087eb5c3f
+#git checkout 07d0d2720c73816e1206882db7bc856087eb5c3f
+# because systemctl and systemd
+git checkout a391d6f89ab906d585e623f58789b39fb0797faf
 make rpm 2>&1 >/dev/null
 rpm -Uvh ./rpm-build/ansible-*.noarch.rpm ||(echo "Could not install built ansible devel rpms" && exit 2 )
 cd ..
