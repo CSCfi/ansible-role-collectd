@@ -44,6 +44,9 @@ ansible --version
 
 id
 
+proc1comm=$(cat /proc/1/comm)
+echo "TEST: proc1s comm is $proc1comm"
+
 }
 
 function install_ansible_devel() {
