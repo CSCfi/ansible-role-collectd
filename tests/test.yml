@@ -2,5 +2,7 @@
 
  - hosts: localhost
    remote_user: root
+   vars:
+     - ansible_service_mgr: systemctl
    roles:
      - ansible-role-collectd
