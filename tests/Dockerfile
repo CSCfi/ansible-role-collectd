@@ -1,4 +1,4 @@
-FROM centos:centos7
+FROM centos:centos7.1.1503
 MAINTAINER "Johan" <me@example.com>
 ENV container docker
 ENV LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8
