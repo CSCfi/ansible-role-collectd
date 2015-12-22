@@ -61,7 +61,7 @@ cd ansible
 # checking out this commit because some errors after 2015-11-05
 #git checkout 07d0d2720c73816e1206882db7bc856087eb5c3f
 # because systemctl and systemd
-git checkout bb2935549f38a83670baadb74041ef98902e0640
+git checkout 0c013f592a31c06baac7aadf27d23598f6abe931
 make rpm 2>&1 >/dev/null
 rpm -Uvh ./rpm-build/ansible-*.noarch.rpm ||(echo "Could not install built ansible devel rpms" && exit 2 )
 cd ..
