@@ -20,8 +20,8 @@ Want to configure collectd to ship metrics with the collectd protocol with a use
 collectd_tsdb_writer: False
 collectd_network_server: True
 collectd_set_graphite_prefix: True
-collectd_graphite_prefix_1: "^hpc\\.jade\\."
-collectd_graphite_prefix_2: "hpc.jade."
+collectd_graphite_prefix_1: "^service\\.clustername\\."
+collectd_graphite_prefix_2: "service.clustername."
 
 collectd_plugins_processes: ""
 collectd_plugins_network:
