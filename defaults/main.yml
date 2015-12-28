@@ -14,7 +14,8 @@ collectd_network_listener: False
 collectd_ipmitool: True
 collectd_precache: True
 collectd_set_graphite_prefix: False
-collectd_graphite_prefix_1: "^hpc\.clustername\."
+# escape backslashes with backslashes
+collectd_graphite_prefix_1: "^hpc\\.clustername\\."
 collectd_graphite_prefix_2: "hpc.clustername."
 
 # Aggregation plugin
