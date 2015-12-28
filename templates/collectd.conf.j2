@@ -123,8 +123,31 @@ LoadPlugin write_tsdb
 LoadPlugin match_regex
 LoadPlugin target_replace
 
-{% if collectd_plugins_processes %}
+{% if collectd_precache == true %}
 PreCacheChain "PreCache"
+{% if collectd_set_graphite_prefix %}
+<Chain "PreCache">
+    # Replace dots in FQDN and prepend a Graphite prefix to the hostname.
+    <Rule "set_graphite_prefix">
+        <Match "regex">
+            # Avoid adding the prefix a second time for local aggregated data.
+            Host "{{ collectd_graphite_prefix_1 }}"
+            Invert true
+        </Match>
+        <Target "replace">
+        # No global replace available, so we need to run same regex multiple times.
+        Host "\\." "_"
+        Host "\\." "_"
+        Host "\\." "_"
+        Host "^" "{{ collectd_graphite_prefix_2 }}"
+        </Target>
+    </Rule>
+</Chain>
+{% endif %}
+
+
+
+{% if collectd_plugins_processes %}
 <Chain "PreCache">
     <Rule "no_fork_rate">
         # collectd.processes.fork_rate
@@ -247,6 +270,7 @@ PreCacheChain "PreCache"
         Target "stop"
     </Rule>
 </Chain>
+{% endif %}
 {% endif %}
 
 {% if collectd_plugins_aggregation and collectd_plugins_cpu %}
