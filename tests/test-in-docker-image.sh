@@ -44,6 +44,9 @@ ansible --version
 
 id
 
+echo "TEST: running systemctl"
+systemctl
+
 }
 
 function install_ansible_devel() {

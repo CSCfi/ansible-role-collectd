@@ -5,5 +5,4 @@
    roles:
      - ansible-role-collectd
    pre_tasks:
-     - name: set ansible_service_mgr
-       set_fact: ansible_service_mgr=systemd
+     - debug: var=ansible_service_mgr
