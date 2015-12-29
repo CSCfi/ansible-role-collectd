@@ -44,9 +44,6 @@ ansible --version
 
 id
 
-proc1comm=$(cat /proc/1/comm)
-echo "TEST: proc1s comm is $proc1comm"
-
 }
 
 function install_ansible_devel() {
@@ -54,7 +51,10 @@ function install_ansible_devel() {
 # http://docs.ansible.com/ansible/intro_installation.html#latest-release-via-yum
 echo "TEST: building ansible"
 
-yum -y install PyYAML python-paramiko python-jinja2 python-httplib2 rpm-build make python2-devel asciidoc 2>&1 >/dev/null || (echo "Could not install ansible yum dependencies" && exit 2 )
+proc1comm=$(cat /proc/1/comm)
+echo "TEST: proc1s comm is $proc1comm"
+
+yum -y install PyYAML python-paramiko python-jinja2 python-httplib2 rpm-build make python2-devel asciidoc patch 2>&1 >/dev/null || (echo "Could not install ansible yum dependencies" && exit 2 )
 rm -Rf ansible
 git clone https://github.com/ansible/ansible --recursive ||(echo "Could not clone ansible from Github" && exit 2 )
 cd ansible
@@ -62,6 +62,11 @@ cd ansible
 #git checkout 07d0d2720c73816e1206882db7bc856087eb5c3f
 # because systemctl and systemd
 git checkout 0c013f592a31c06baac7aadf27d23598f6abe931
+wget https://gist.githubusercontent.com/martbhell/025f167294e1f71a8c83/raw/d7525e7ec5553042092aad9a8ba17dfd933f9b9c/facts.py.patch -O facts.py.patch
+if [ "$proc1comm" == "bash" ]; then
+    echo "TEST: patching facts.py to force using systemd as a service manager because proc1comm is $proc1comm"
+    patch lib/ansible/module_utils/facts.py facts.py.patch
+fi
 make rpm 2>&1 >/dev/null
 rpm -Uvh ./rpm-build/ansible-*.noarch.rpm ||(echo "Could not install built ansible devel rpms" && exit 2 )
 cd ..
