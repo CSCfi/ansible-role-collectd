@@ -44,8 +44,8 @@ ansible --version
 
 id
 
-#echo "TEST: running systemctl"
-#systemctl
+echo "TEST: running systemctl"
+systemctl
 
 }
 
