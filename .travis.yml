@@ -18,11 +18,12 @@ install:
   - npm install -g validate-dockerfile
 
 script:
+  - export ROLETOTEST=$(basename $(pwd)
   - export COMMIT=${TRAVIS_COMMIT::8}
   - export REPO=trinitronx/ansible-base
   - docklint ${IMAGE_BUILD_PLATFORM}/Dockerfile
   - docker build -t ${REPO}:${IMAGE_BUILD_PLATFORM} ${IMAGE_BUILD_PLATFORM}/
-  - docker run --privileged -d -ti -e "container=docker"  -v /sys/fs/cgroup:/sys/fs/cgroup  ${REPO}:${IMAGE_BUILD_PLATFORM}  /usr/sbin/init
+  - docker run --privileged -d -ti -e "container=docker"  -v `pwd`:/$ROLETOTEST -v /sys/fs/cgroup:/sys/fs/cgroup  ${REPO}:${IMAGE_BUILD_PLATFORM}  /usr/sbin/init
   - DOCKER_CONTAINER_ID=$(docker ps | grep ${IMAGE_BUILD_PLATFORM} | awk '{print $1}')
   - docker logs $DOCKER_CONTAINER_ID
 # Prepare test environment
@@ -65,6 +66,8 @@ script:
        systemctl --no-pager --all --full status ;
        echo -ne "------\nJournalD Logs:\n------\n" ;
        sudo journalctl --catalog --all --full --no-pager'
+  - docker exec -ti $DOCKER_CONTAINER_ID /bin/sh -c 'sudo yum -y install tree'
+  - docker exec -ti DOCKER_CONTAINER_ID /bin/sh -c 'tree'
   - docker ps -a
   - docker stop $DOCKER_CONTAINER_ID
   - docker rm -v $DOCKER_CONTAINER_ID
