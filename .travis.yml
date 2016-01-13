@@ -11,6 +11,7 @@ matrix:
   fast_finish: true
 
 env:
+  - TESTDIR=tests
   - IMAGE_BUILD_PLATFORM=stable-centos7
   - IMAGE_BUILD_PLATFORM=devel-centos7
 
@@ -21,8 +22,8 @@ script:
   - export ROLETOTEST=$(basename $(pwd))
   - export COMMIT=${TRAVIS_COMMIT::8}
   - export REPO=trinitronx/ansible-base
-  - docklint ${IMAGE_BUILD_PLATFORM}/Dockerfile
-  - docker build -t ${REPO}:${IMAGE_BUILD_PLATFORM} ${IMAGE_BUILD_PLATFORM}/
+  - docklint ${TESTDIR}/${IMAGE_BUILD_PLATFORM}/Dockerfile
+  - docker build -t ${REPO}:${IMAGE_BUILD_PLATFORM} ${TESTDIR}/${IMAGE_BUILD_PLATFORM}/
   - docker run --privileged -d -ti -e "container=docker"  -v `pwd`:/$ROLETOTEST -v /sys/fs/cgroup:/sys/fs/cgroup  ${REPO}:${IMAGE_BUILD_PLATFORM}  /usr/sbin/init
   - DOCKER_CONTAINER_ID=$(docker ps | grep ${IMAGE_BUILD_PLATFORM} | awk '{print $1}')
   - docker logs $DOCKER_CONTAINER_ID
