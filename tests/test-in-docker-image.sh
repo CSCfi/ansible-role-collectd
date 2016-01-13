@@ -45,17 +45,18 @@ ansible --version
 id
 
 echo "TEST: running systemctl"
-systemctl
+systemctl --no-pager
 
 }
 
 function install_ansible_devel() {
 
 # http://docs.ansible.com/ansible/intro_installation.html#latest-release-via-yum
-echo "TEST: building ansible"
 
 proc1comm=$(cat /proc/1/comm)
 echo "TEST: proc1s comm is $proc1comm"
+
+echo "TEST: building ansible"
 
 yum -y install PyYAML python-paramiko python-jinja2 python-httplib2 rpm-build make python2-devel asciidoc patch wget 2>&1 >/dev/null || (echo "Could not install ansible yum dependencies" && exit 2 )
 rm -Rf ansible
