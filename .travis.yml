@@ -20,11 +20,16 @@ install:
 script:
   # TESTDIR = Where the stable-centos/Dockerfile is located
   - export TESTDIR=tests
+  # ROLETOTEST = The name of this repo
   - export ROLETOTEST=$(basename $(pwd))
   - export COMMIT=${TRAVIS_COMMIT::8}
-  - export REPO=trinitronx/ansible-base
+  # The tag we assign the docker image we build with the Dockerfile
+  - export REPO=csc/ansible
+  # https://www.npmjs.com/package/validate-dockerfile - validate the Dockerfile
   - docklint ${TESTDIR}/${IMAGE_BUILD_PLATFORM}/Dockerfile
+  # Build the image
   - docker build -t ${REPO}:${IMAGE_BUILD_PLATFORM} ${TESTDIR}/${IMAGE_BUILD_PLATFORM}/
+  # Launch the container
   - docker run --privileged -d -ti -e "container=docker"  -v `pwd`:/$ROLETOTEST -v /sys/fs/cgroup:/sys/fs/cgroup  ${REPO}:${IMAGE_BUILD_PLATFORM}  /usr/sbin/init
   - DOCKER_CONTAINER_ID=$(docker ps | grep ${IMAGE_BUILD_PLATFORM} | awk '{print $1}')
   - docker logs $DOCKER_CONTAINER_ID
@@ -59,7 +64,8 @@ script:
     docker exec -ti $DOCKER_CONTAINER_ID /bin/sh -c 'cd /opt/ansible/ansible &&
        sudo pip install tox sphinx &&
        sudo pip install paramiko PyYAML jinja2 httplib2 passlib nose mock '
-  - docker exec -ti $DOCKER_CONTAINER_ID /bin/sh -c '/ansible-role-collectd/tests/test-in-docker-image.sh'
+  # Testing of this ansible-role:
+  - docker exec -ti $DOCKER_CONTAINER_ID /bin/sh -c "/$ROLETOTEST/tests/test-in-docker-image.sh"
 #  - docker exec -ti $DOCKER_CONTAINER_ID /bin/sh -c 'cd /opt/ansible/ansible && make tests '
 #  - >
 #    docker exec -ti $DOCKER_CONTAINER_ID /bin/sh -c 'cd /opt/ansible/ansible/test/integration/ &&
