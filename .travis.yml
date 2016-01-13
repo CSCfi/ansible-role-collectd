@@ -11,8 +11,8 @@ matrix:
   fast_finish: true
 
 env:
-  - IMAGE_BUILD_PLATFORM=tests/stable-centos7
-  - IMAGE_BUILD_PLATFORM=tests/devel-centos7
+  - IMAGE_BUILD_PLATFORM=stable-centos7
+  - IMAGE_BUILD_PLATFORM=devel-centos7
 
 install:
   - npm install -g validate-dockerfile
