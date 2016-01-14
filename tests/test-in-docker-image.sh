@@ -40,21 +40,18 @@ printf "" > ssh.config
 
 function show_version() {
 
+echo "TEST: show versions"
 ansible --version
-
 id
-
-echo "TEST: running systemctl"
 systemctl --no-pager
+proc1comm=$(cat /proc/1/comm)
+echo "TEST: proc1s comm is $proc1comm"
 
 }
 
 function install_ansible_devel() {
 
 # http://docs.ansible.com/ansible/intro_installation.html#latest-release-via-yum
-
-proc1comm=$(cat /proc/1/comm)
-echo "TEST: proc1s comm is $proc1comm"
 
 echo "TEST: building ansible"
 
@@ -76,7 +73,7 @@ rm -Rf ansible
 function install_os_deps() {
 echo "TEST: installing os deps"
 
-yum -y install epel-release sudo ansible tree git which file less||(echo "Could not install some os deps" && exit 2 )
+yum -y install epel-release sudo tree git which file less||(echo "Could not install some os deps" && exit 2 )
 
 }
 
