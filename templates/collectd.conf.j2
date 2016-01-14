@@ -37,15 +37,6 @@ LoadPlugin network
 </Plugin>
 {% endif %}
 
-{% if collectd_network_server %}
-# The network plugin ships metrics to *
-LoadPlugin network
-<Plugin network>
-    <Server "{{ collectd_network_server_host }}" "25826">
-    </Server>
-</Plugin>
-{% endif %}
-
 {% if collectd_plugins_aggregation %}
 <Plugin "aggregation">
     {% if collectd_plugins_cpu %}
