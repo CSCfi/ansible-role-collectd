@@ -15,6 +15,11 @@ Interval 60
      quote_all_strings=true) }}
 ###
 
+# Set WriteThreads to 1 from default 5 in case we run an exec plugin
+{% if collectd_plugins_exec %}
+WriteThreads    1
+{% endif %}
+
 {% if collectd_network_listener %}
 # The network plugin receives metrics from *
 LoadPlugin network
