@@ -29,6 +29,15 @@ LoadPlugin network
     <Listen "::" "25826">
     </Listen>
 
+
+    {% if collectd_network_server_host %}
+    <Server "{{ collectd_network_server_host }}" "252826">
+        SecurityLevel Encrypt
+        Username " {{ collectd_network_server_user }} "
+        Password " {{ collectd_network_server_password }} "
+        </Server>
+        {% endif %}
+
 #   MaxPacketSize 1024
 #
 #   # proxy setup (client and server as above):
