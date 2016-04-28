@@ -33,7 +33,7 @@
     when: ansible_virtualization_role != "guest" and collectd_ipmitool
 
   - name: install dcmi.sh on non guest hosts
-    get_url: owner=nobody group=nobody mode=0755 backup=no url=https://github.com/jabl/collectd-plugin-dcmi/blob/v1.0.1/dcmi.sh dest=/usr/local/sbin/dcmi.sh
+    get_url: owner=nobody group=nobody mode=0755 backup=no url=https://raw.githubusercontent.com/jabl/collectd-plugin-dcmi/v1.0.1/dcmi.sh dest=/usr/local/sbin/dcmi.sh
     when: ansible_virtualization_role != "guest" and collectd_ipmitool
 
   - name: add sudoers rule for freeipmi
