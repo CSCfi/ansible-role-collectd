@@ -95,6 +95,7 @@ LoadPlugin network
 # If not a VM
 <Plugin exec>
 	Exec "nobody" "/usr/local/bin/ipmitool.sh"
+	Exec "nobody" "/usr/local/sbin/dcmi.sh"
 </Plugin>
     {% endif %}
   {% endif %}

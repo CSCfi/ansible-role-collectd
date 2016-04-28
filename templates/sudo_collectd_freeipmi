@@ -1,0 +1,4 @@
+# {{ ansible_managed }}
+Defaults:nobody !requiretty, !syslog
+nobody ALL=NOPASSWD: /usr/sbin/ipmi-dcmi
+nobody ALL=NOPASSWD: /usr/sbin/ipmi-sensors
