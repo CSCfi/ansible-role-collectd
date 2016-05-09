@@ -51,6 +51,11 @@ collectd_plugins_custom: "{{
 
 </pre>
 
+External IPMI scripts
+
+This role fetches a few scripts from other github repos for IPMI statistics.
+If you set "collectd_force_geturl: True" then this role will re-download those scripts if they already exists. 
+
 Dependencies
 ------------
 
