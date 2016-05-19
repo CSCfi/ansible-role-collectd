@@ -301,7 +301,8 @@ PostCacheChain "PostCache"
         {% if collectd_tsdb_writer == True %}
 	    # https://collectd.org/wiki/index.php/Plugin:Write_TSDB
             Plugin "write_tsdb/{{ collectd_tsdb_host }}/{{ collectd_tsdb_port }}"
-	{% elif collectd_network_server == True %}
+ 	{% endif %}
+	{% if collectd_network_server == True %}
 	    Plugin "network"
  	{% endif %}
         </Target>
