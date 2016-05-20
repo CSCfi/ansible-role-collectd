@@ -56,6 +56,9 @@ External IPMI scripts
 This role fetches a few scripts from other github repos for IPMI statistics.
 If you set "collectd_force_geturl: True" then this role will re-download those scripts if they already exists. 
 
+With collectd_drop_rsyslog_spam True we install an rsyslog.d/ file that drops "value has been dispatche
+d" syslog messages from the exec plugin.
+
 Dependencies
 ------------
 

@@ -50,10 +50,10 @@
     yum: name=freeipmi state=present
     when: ansible_virtualization_role != "guest" and collectd_ipmitool
 
-  - name: drop some collectd excessive message by rsyslog
+  - name: drop some collectd excessive message by rsyslog if collectd_plugins_exec is defined
     template: src=collectd_rsyslog_drop.conf dest=/etc/rsyslog.d/10_collectd_drop.conf owner=root mode=0644 backup=no
     register: collectd_rsyslog_drop
-    when: ansible_virtualization_role != "guest" and collectd_ipmitool
+    when: collectd_drop_rsyslog_spam and collectd_plugins_exec is defined
 
   - name: enable and start collectd
     service: name=collectd state=started enabled=yes
