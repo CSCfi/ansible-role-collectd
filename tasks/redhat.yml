@@ -53,7 +53,7 @@
   - name: drop some collectd excessive message by rsyslog if collectd_plugins_exec is defined
     template: src=collectd_rsyslog_drop.conf dest=/etc/rsyslog.d/10_collectd_drop.conf owner=root mode=0644 backup=no
     register: collectd_rsyslog_drop
-    when: collectd_drop_rsyslog_spam and collectd_plugins_exec is defined
+    when: (collectd_drop_rsyslog_spam and collectd_plugins_exec is defined) or (ansible_virtualization_role != "guest" and collectd_ipmitool)
 
   - name: enable and start collectd
     service: name=collectd state=started enabled=yes

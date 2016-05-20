@@ -13,7 +13,7 @@ collectd_network_server_host: "{{ hostvars[groups['install'][0]]['ansible_hostna
 collectd_network_listener: False
 collectd_ipmitool: True
 # With collectd_drop_rsyslog_spam True we install an rsyslog.d/ file that drops "value has been dispatched" syslog messages from the exec plugin.
-collectd_drop_rsyslog_spam: True
+collectd_drop_rsyslog_spam: False
 # set collectd_force_geturl to True to set force=true with the get_url module. This re-downloads the external scripts. If False it only downloads the file if it doesn't exist at all.
 collectd_force_geturl: False
 collectd_precache: True
