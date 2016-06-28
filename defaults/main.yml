@@ -1,6 +1,7 @@
 ---
 # defaults file for ansible-role-collectd
 #
+collectd_manage_repos: True
 collectd_plugin_packages: []
 collectd_conf_dir: /etc/collectd.d
 
@@ -42,6 +43,9 @@ collectd_plugins_exec:
   - options:
     - LoadPlugin: exec
 
+# extra exec plugin commannds
+collectd_exec_plugin_commands: ""
+
 # Interface plugin
 collectd_plugins_interface:
   - options:
@@ -61,6 +65,12 @@ collectd_plugins_memory:
 collectd_plugins_processes:
   - options:
     - LoadPlugin: processes
+collectd_process_slurmstepd: True
+
+# Uptime plugin
+collectd_plugins_uptime:
+  - options:
+    - LoadPlugin: uptime
 
 
 # Plugins definitions
