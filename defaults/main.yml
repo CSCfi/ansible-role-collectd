@@ -63,6 +63,7 @@ collectd_plugins_processes:
   - options:
     - LoadPlugin: processes
 collectd_process_slurmstepd: True
+collectd_chain_process_disable_some_metrics: True
 
 
 # Plugins definitions

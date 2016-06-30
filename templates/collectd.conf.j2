@@ -148,6 +148,7 @@ PreCacheChain "PreCache"
 
 
 {% if collectd_plugins_processes %}
+{% if collectd_chain_process_disable_some_metrics %}
 <Chain "PreCache">
     <Rule "no_fork_rate">
         # collectd.processes.fork_rate
@@ -270,6 +271,7 @@ PreCacheChain "PreCache"
         Target "stop"
     </Rule>
 </Chain>
+{% endif %}
 {% endif %}
 {% endif %}
 
