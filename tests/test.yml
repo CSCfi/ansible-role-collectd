@@ -2,6 +2,27 @@
 
  - hosts: localhost
    remote_user: root
+   vars:
+     - collectd_chain_process_disable_some_metrics: False
+     - collectd_plugins_exec_custom:
+       - options:
+         - LoadPlugin: exec
+       - sections:
+         - name: Plugin
+           param: exec
+           content:
+            - options:
+              - Exec:
+                - nobody 
+                - /usr/local/bin/collectd_postgresql_db_sizes.sh
+              - Exec:
+                - nobody 
+                - /usr/local/bin/collectd_postgresql_db_connections.py
+     - collectd_global_options_custom: "{{
+         collectd_plugins_exec_db 
+       }}"
+     
+
    roles:
      - ansible-role-collectd
    pre_tasks:
