@@ -19,7 +19,7 @@
                 - nobody 
                 - /usr/local/bin/collectd_postgresql_db_connections.py
      - collectd_global_options_custom: "{{
-         collectd_plugins_exec_db 
+         collectd_plugins_exec_custom
        }}"
      
 
