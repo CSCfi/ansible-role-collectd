@@ -4,6 +4,7 @@
 
   - name: install EPEL
     yum: name=epel-release state=present
+    when: collectd_manage_repos
 
   - name: install collectd
     yum: name=collectd state=present
