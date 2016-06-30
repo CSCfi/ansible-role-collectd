@@ -84,21 +84,28 @@ LoadPlugin network
 {% endif %}
 
 {% if collectd_plugins_processes %}
+{% if collectd_process_slurmstepd %}
 <Plugin processes>
    Process "slurmstepd"
 </Plugin>
 {% endif %}
+{% endif %}
 
 {% if collectd_plugins_exec %}
+<Plugin exec>
   {% if collectd_ipmitool %}
     {% if ansible_virtualization_role != "guest" %}
 # If not a VM
-<Plugin exec>
 	Exec "nobody" "/usr/local/bin/ipmitool.sh"
 	Exec "nobody" "/usr/local/sbin/dcmi.sh"
-</Plugin>
     {% endif %}
   {% endif %}
+  {% if collectd_exec_plugin_commands is defined %}
+    {% for i in collectd_exec_plugin_commands %}
+        Exec "{{ i.user }}" "{{ i.command }}"
+    {% endfor %}
+  {% endif %}
+</Plugin>
 {% endif %}
 
 {% if collectd_tsdb_writer %}
