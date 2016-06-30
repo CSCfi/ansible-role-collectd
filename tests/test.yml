@@ -4,6 +4,7 @@
    remote_user: root
    vars:
      - collectd_chain_process_disable_some_metrics: False
+     - collectd_set_graphite_prefix: True
      - collectd_plugins_exec_custom:
        - options:
          - LoadPlugin: exec
