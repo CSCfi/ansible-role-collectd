@@ -68,6 +68,8 @@ Some ideas borrowed from https://github.com/picotrading/ansible-collectd and tha
 https://raw.githubusercontent.com/picotrading/config-encoder-macros/master/macros/apache_encode_macro.j2
 </pre>
 
+ansible 2.0 (because checksum= with get_url: module)
+
 Example Playbook
 ----------------
 
