@@ -22,6 +22,7 @@
              url=https://raw.githubusercontent.com/lunetics/collectd-plugins/32d751ed913b1e1d84bf78a4848648fb63379689/ipmitool/ipmitool.sh 
              dest=/usr/local/bin/ipmitool.sh
              force={{ collectd_force_geturl }}
+             checksum="sha1:9ef61d4202fef81ee25a122ff415e77c62159414"
     when: ansible_virtualization_role != "guest" and collectd_ipmitool
 
   - name: set permissions on ipmitool.sh
@@ -41,6 +42,7 @@
              url=https://raw.githubusercontent.com/jabl/collectd-plugin-dcmi/v2.0.0/dcmi.sh 
              dest=/usr/local/sbin/dcmi.sh
              force={{ collectd_force_geturl }}
+             checksum="sha1:561329a8494c53281f227a9d5057b8441740f42d"
     when: ansible_virtualization_role != "guest" and collectd_ipmitool
 
   - name: add sudoers rule for freeipmi
