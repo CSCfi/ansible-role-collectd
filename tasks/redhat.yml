@@ -3,15 +3,19 @@
 #
 
   - name: install EPEL
-    yum: name=epel-release state=present
+    package: name=epel-release state=present
     when: collectd_manage_repos
 
   - name: install collectd
-    yum: name=collectd state=present
+    package: name=collectd state=present
 
   - name: install collectd_plugin_packages
-    yum: name={{ item }} state=present
+    package: name={{ item }} state=present
     with_items: "{{ collectd_plugin_packages }}"
+
+  - name: install collectd_tsdb_writer plugin if it is True
+    package: name=collectd-write_tsdb state=present
+    when: collectd_tsdb_writer
 
   - name: template in collectd.d/collectd.conf
     template: src=collectd.conf.j2 dest={{ collectd_conf_dir }}/collectd.conf owner=root mode=0644 backup=no
@@ -34,7 +38,7 @@
     when: ansible_virtualization_role != "guest" and collectd_ipmitool
 
   - name: install ipmitool if virtualization role is not guest
-    yum: name=ipmitool state=present
+    package: name=ipmitool state=present
     when: ansible_virtualization_role != "guest" and collectd_ipmitool
 
   - name: install dcmi.sh on non guest hosts
@@ -50,7 +54,7 @@
     when: ansible_virtualization_role != "guest" and collectd_ipmitool
 
   - name: install freeipmi if virtualization role is not guest
-    yum: name=freeipmi state=present
+    package: name=freeipmi state=present
     when: ansible_virtualization_role != "guest" and collectd_ipmitool
 
   - name: when using exec plugin prevent value has been dispatched messages from reaching rsyslog
