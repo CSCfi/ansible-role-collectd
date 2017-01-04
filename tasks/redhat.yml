@@ -3,72 +3,113 @@
 #
 
   - name: install EPEL
-    package: name=epel-release state=present
+    package:
+      name: epel-release
+      state: present
     when: collectd_manage_repos
 
   - name: install collectd
-    package: name=collectd state=present
+    package:
+      name: collectd
+      state: present
 
   - name: install collectd_plugin_packages
-    package: name={{ item }} state=present
+    package:
+      name: "{{ item }}"
+      state: present
     with_items: "{{ collectd_plugin_packages }}"
 
   - name: install collectd_tsdb_writer plugin if it is True
-    package: name=collectd-write_tsdb state=present
+    package:
+      name: collectd-write_tsdb
+      state: present
     when: collectd_tsdb_writer
 
   - name: template in collectd.d/collectd.conf
-    template: src=collectd.conf.j2 dest={{ collectd_conf_dir }}/collectd.conf owner=root mode=0644 backup=no
+    template:
+      src: collectd.conf.j2
+      dest: "{{ collectd_conf_dir }}/collectd.conf"
+      owner: root
+      mode: 0644
+      backup: no
     register: collectd_config
+    notify: restart collectd
 
-  - name: install the ipmitool.sh on non guest hosts
-    get_url: owner=nobody group=nobody mode=0755 backup=yes 
-             url=https://raw.githubusercontent.com/lunetics/collectd-plugins/32d751ed913b1e1d84bf78a4848648fb63379689/ipmitool/ipmitool.sh 
-             dest=/usr/local/bin/ipmitool.sh
-             force={{ collectd_force_geturl }}
-             checksum="sha1:9ef61d4202fef81ee25a122ff415e77c62159414"
+  - name: get_url install the ipmitool.sh on non guest hosts
+    get_url:
+      owner: nobody
+      group: nobody
+      mode: 0755
+      backup: yes
+      url: https://raw.githubusercontent.com/lunetics/collectd-plugins/32d751ed913b1e1d84bf78a4848648fb63379689/ipmitool/ipmitool.sh
+      dest: /usr/local/bin/ipmitool.sh
+      force: "{{ collectd_force_geturl }}"
+      checksum: "sha1:9ef61d4202fef81ee25a122ff415e77c62159414"
     when: ansible_virtualization_role != "guest" and collectd_ipmitool
 
   - name: set permissions on ipmitool.sh
-    file: path=/usr/local/bin/ipmitool.sh owner=nobody group=nobody mode=0755
+    file:
+      path: /usr/local/bin/ipmitool.sh
+      owner: nobody
+      group: nobody
+      mode: 0755
     when: ansible_virtualization_role != "guest" and collectd_ipmitool
 
   - name: add sudoers rule for ipmitool
-    template: src=sudo_collectd_ipmitool dest=/etc/sudoers.d/sudo_collectd_ipmitool owner=root group=root mode=0640
+    template:
+      src: sudo_collectd_ipmitool
+      dest: /etc/sudoers.d/sudo_collectd_ipmitool
+      owner: root
+      group: root
+      mode: 0640
     when: ansible_virtualization_role != "guest" and collectd_ipmitool
 
   - name: install ipmitool if virtualization role is not guest
-    package: name=ipmitool state=present
+    package:
+      name: ipmitool
+      state: present
     when: ansible_virtualization_role != "guest" and collectd_ipmitool
 
   - name: install dcmi.sh on non guest hosts
-    get_url: owner=nobody group=nobody mode=0755 backup=no 
-             url=https://raw.githubusercontent.com/jabl/collectd-plugin-dcmi/v2.0.0/dcmi.sh 
-             dest=/usr/local/sbin/dcmi.sh
-             force={{ collectd_force_geturl }}
-             checksum="sha1:561329a8494c53281f227a9d5057b8441740f42d"
+    get_url:
+      owner: nobody
+      group: nobody
+      mode: 0755
+      backup: no
+      url: https://raw.githubusercontent.com/jabl/collectd-plugin-dcmi/v2.0.0/dcmi.sh
+      dest: /usr/local/sbin/dcmi.sh
+      force: "{{ collectd_force_geturl }}"
+      checksum: "sha1:561329a8494c53281f227a9d5057b8441740f42d"
     when: ansible_virtualization_role != "guest" and collectd_ipmitool
 
   - name: add sudoers rule for freeipmi
-    template: src=sudo_collectd_freeipmi dest=/etc/sudoers.d/sudo_collectd_freeipmi owner=root group=root mode=0640
+    template:
+      src: sudo_collectd_freeipmi
+      dest: /etc/sudoers.d/sudo_collectd_freeipmi
+      owner: root
+      group: root
+      mode: 0640
     when: ansible_virtualization_role != "guest" and collectd_ipmitool
 
   - name: install freeipmi if virtualization role is not guest
-    package: name=freeipmi state=present
+    package:
+      name: freeipmi
+      state: present
     when: ansible_virtualization_role != "guest" and collectd_ipmitool
 
   - name: when using exec plugin prevent value has been dispatched messages from reaching rsyslog
-    template: src=collectd_rsyslog_drop.conf dest=/etc/rsyslog.d/10_collectd_drop.conf owner=root mode=0644 backup=no
+    template:
+      src: collectd_rsyslog_drop.conf
+      dest: /etc/rsyslog.d/10_collectd_drop.conf
+      owner: root
+      mode: 0644
+      backup: no
     register: collectd_rsyslog_drop
     when: (collectd_drop_rsyslog_spam and collectd_plugins_exec is defined) or (ansible_virtualization_role != "guest" and collectd_ipmitool)
+    notify: restart rsyslog
 
   - name: enable and start collectd
-    service: name=collectd state=started enabled=yes
-
-  - name: restart rsyslog if collectd_rsyslog_drop changed
-    service: name=rsyslog state=restarted
-    when: collectd_rsyslog_drop.changed
-
-  - name: restart collectd on configchange
-    service: name=collectd state=restarted
-    when: collectd_config.changed
+    service: 
+      name: collectd 
+      state: started 
+      enabled: yes
