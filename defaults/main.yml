@@ -18,10 +18,34 @@ collectd_drop_rsyslog_spam: False
 # set collectd_force_geturl to True to set force=true with the get_url module. This re-downloads the external scripts. If False it only downloads the file if it doesn't exist at all.
 collectd_force_geturl: False
 collectd_precache: True
-collectd_set_graphite_prefix: False
-# escape backslashes with backslashes
-collectd_graphite_prefix_1: "^hpc\\.clustername\\."
-collectd_graphite_prefix_2: "hpc.clustername."
+
+# Extra rules for collectd prefix mangling
+collectd_prefix_rules: []
+
+# Example: This mimics the old behaviour if you had
+# collectd_set_graphite_prefix: True
+#
+# collectd_prefix_rules:
+#   - name: generic_prefix
+#     regexp: "^hpc\\.clustername\\."
+#     invert_match: True
+#     prefix: "hpc.clustername."
+#     stop: False
+#
+# This is similar, but puts storage* servers in their own prefix.
+#
+# collectd_prefix_rules:
+#   - name: "storage_prefix"
+#     regexp: "^storage"
+#     invert_match: False
+#     prefix: "hpc.storage."
+#     stop: True
+#   - name: generic_prefix
+#     regexp: "^hpc\\.clustername\\."
+#     invert_match: True
+#     prefix: "hpc.clustername."
+#     stop: False
+# if stop is True, no other prefix rules will be processed after this.
 
 # Aggregation plugin
 collectd_plugins_aggregation:
