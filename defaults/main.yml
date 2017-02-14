@@ -23,6 +23,19 @@ collectd_set_graphite_prefix: False
 collectd_graphite_prefix_1: "^hpc\\.clustername\\."
 collectd_graphite_prefix_2: "hpc.clustername."
 
+# Extra rules for collectd prefix mangling
+collectd_extra_prefix_rules: []
+
+# Example: put all storage servers in their own prefix
+# 
+# collectd_extra_prefix_rules:
+#   - name: "storage_prefix"
+#     regexp: "^storage"
+#     prefix: "hpc.storage."
+#     stop: True | False
+#
+# if stop is True, no other prefix rules will be processed after this.
+
 # Aggregation plugin
 collectd_plugins_aggregation:
   - options:

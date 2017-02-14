@@ -126,6 +126,26 @@ LoadPlugin target_replace
 PreCacheChain "PreCache"
 {% if collectd_set_graphite_prefix %}
 <Chain "PreCache">
+{% for rule in collectd_extra_prefix_rules %}
+    <Rule "{{ rule.name }}">
+        <Match "regex">
+            # Avoid adding the prefix a second time for local aggregated data.
+            Host "{{ rule.regexp }}"
+        </Match>
+        <Target "replace">
+        # No global replace available, so we need to run same regex multiple times.
+        Host "\\." "_"
+        Host "\\." "_"
+        Host "\\." "_"
+        Host "\\." "_"
+        Host "^" "{{ rule.prefix }}"
+        </Target>
+{% if rule.stop %}
+        <Target "return">
+        </Target>
+{% endif %}
+    </Rule>
+{% endfor %}
     # Replace dots in FQDN and prepend a Graphite prefix to the hostname.
     <Rule "set_graphite_prefix">
         <Match "regex">
