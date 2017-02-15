@@ -21,7 +21,12 @@
      - collectd_global_options_custom: "{{
          collectd_plugins_exec_custom
        }}"
-     
+     - collectd_prefix_rules:
+       - name: generic_prefix
+         regexp: "^hpc\\.myawesomeclustername\\."
+         invert_match: True
+         prefix: "hpc.myawesomeclustername."
+         stop: False
 
    roles:
      - ansible-role-collectd
