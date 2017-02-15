@@ -19,9 +19,14 @@ Want to configure collectd to ship metrics with the collectd protocol with a use
 <pre>
 collectd_tsdb_writer: False
 collectd_network_server: True
-collectd_set_graphite_prefix: True
-collectd_graphite_prefix_1: "^service\\.clustername\\."
-collectd_graphite_prefix_2: "service.clustername."
+
+# There is another prefix example in defaults/main.yml
+collectd_prefix_rules:
+  - name: generic_prefix
+    regexp: "^hpc\\.clustername\\."
+    invert_match: True
+    prefix: "hpc.clustername."
+    stop: False
 
 collectd_plugins_processes: ""
 collectd_plugins_network:
