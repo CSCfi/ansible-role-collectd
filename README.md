@@ -88,7 +88,7 @@ Including an example of how to use your role (for instance, with variables passe
 Known Issues / Caveats
 ------------
 
-version v2.0.0 of this role will fail if variable collectd_set_graphite_prefix is defined. Github issues #10 and #12
+version v2.0.0 of this role will fail if variable collectd_set_graphite_prefix is defined. Github issues [#10](https://github.com/CSC-IT-Center-for-Science/ansible-role-collectd/issues/10) and [#12](https://github.com/CSC-IT-Center-for-Science/ansible-role-collectd/issues/12)
 
 License
 -------
