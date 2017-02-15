@@ -124,14 +124,15 @@ LoadPlugin target_replace
 
 {% if collectd_precache == true %}
 PreCacheChain "PreCache"
-{% if collectd_set_graphite_prefix %}
+{% if collectd_prefix_rules %}
 <Chain "PreCache">
-    # Replace dots in FQDN and prepend a Graphite prefix to the hostname.
-    <Rule "set_graphite_prefix">
+{% for rule in collectd_prefix_rules %}
+    <Rule "{{ rule.name }}">
         <Match "regex">
-            # Avoid adding the prefix a second time for local aggregated data.
-            Host "{{ collectd_graphite_prefix_1 }}"
+            Host "{{ rule.regexp }}"
+{% if rule.invert_match %}
             Invert true
+{% endif %}
         </Match>
         <Target "replace">
         # No global replace available, so we need to run same regex multiple times.
@@ -139,9 +140,14 @@ PreCacheChain "PreCache"
         Host "\\." "_"
         Host "\\." "_"
         Host "\\." "_"
-        Host "^" "{{ collectd_graphite_prefix_2 }}"
+        Host "^" "{{ rule.prefix }}"
         </Target>
+{% if rule.stop %}
+        <Target "return">
+        </Target>
+{% endif %}
     </Rule>
+{% endfor %}
 </Chain>
 {% endif %}
 
