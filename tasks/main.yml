@@ -1,5 +1,10 @@
 ---
 # tasks file for ansible-role-collectd
 #
+  - name: Make sure role data changes have been made
+    assert:
+      that: collectd_set_graphite_prefix is not defined
+      msg: "collectd_set_graphite_prefix is deprecated. See defaults/main.yml"
+
   - include: redhat.yml
     when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "7"
