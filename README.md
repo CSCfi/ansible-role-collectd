@@ -9,6 +9,7 @@ Requirements
 
 /etc/collectd.d/ directory
 
+
 Role Variables
 --------------
 
@@ -83,6 +84,11 @@ Including an example of how to use your role (for instance, with variables passe
     - hosts: servers
       roles:
          - { role: ansible-role-collectd }
+
+Known Issues / Caveats
+------------
+
+version v2.0.0 of this role will fail if variable collectd_set_graphite_prefix is defined. Github issues #10 and #12
 
 License
 -------
