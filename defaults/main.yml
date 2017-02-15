@@ -23,8 +23,6 @@ collectd_precache: True
 collectd_prefix_rules: []
 
 # Example: This mimics the old behaviour if you had
-# collectd_set_graphite_prefix: True
-#
 # collectd_prefix_rules:
 #   - name: generic_prefix
 #     regexp: "^hpc\\.clustername\\."
