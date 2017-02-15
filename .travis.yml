@@ -42,19 +42,12 @@ script:
        systemctl --no-pager --all --full status ;
        echo -ne "------\nJournalD Logs:\n------\n" ;
        sudo journalctl --catalog --all --full --no-pager'
-  - docker exec -ti $DOCKER_CONTAINER_ID /bin/sh -c 'sudo yum -y install tree'
   - docker exec -ti $DOCKER_CONTAINER_ID /bin/sh -c 'tree /ansible*'
   - docker ps -a
   - docker stop $DOCKER_CONTAINER_ID
   - docker rm -v $DOCKER_CONTAINER_ID
 #after_success:
 #  - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
-#  - if [ "$TRAVIS_BRANCH" == "master" -a "$IMAGE_BUILD_PLATFORM" == "stable-centos7" ]; then docker tag ${REPO}:${IMAGE_BUILD_PLATFORM} $REPO:latest; fi
-#  - docker tag ${REPO}:${IMAGE_BUILD_PLATFORM} $REPO:travis-${TRAVIS_BUILD_NUMBER}
-#  - docker tag ${REPO}:${IMAGE_BUILD_PLATFORM} $REPO:${IMAGE_BUILD_PLATFORM}-${ANSIBLE_VERSION}
-#  - docker tag ${REPO}:${IMAGE_BUILD_PLATFORM} $REPO:${IMAGE_BUILD_PLATFORM}-${GIT_COMMIT:-$GIT_TAG}
-#  - docker push $REPO
-#  - "[ -e \"~/.docker/config.json\" ] && shred -n 30 -u -z ~/.docker/config.json"
 
 notifications:
   email: false
