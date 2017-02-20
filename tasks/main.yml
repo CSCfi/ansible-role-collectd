@@ -1,7 +1,7 @@
 ---
 # tasks file for ansible-role-collectd
 #
-- name: using variable collectd_set_graphite_prefix only works before v2.0.0 of ansible-role-collectd
+  - name: using variable collectd_set_graphite_prefix only works before v2.0.0 of ansible-role-collectd
     assert:
       that: collectd_set_graphite_prefix is not defined
       msg: "collectd_set_graphite_prefix is deprecated. See defaults/main.yml"
