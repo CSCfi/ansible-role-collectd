@@ -18,7 +18,7 @@ env:
 install:
   - npm install -g validate-dockerfile
 
-script:
+before_script:
   # TESTDIR = Where the stable-centos/Dockerfile is located
   - export TESTDIR=tests
   # ROLETOTEST = The name of this repo
@@ -35,7 +35,9 @@ script:
   - DOCKER_CONTAINER_ID=$(docker ps | grep ${IMAGE_BUILD_PLATFORM} | awk '{print $1}')
   - docker logs $DOCKER_CONTAINER_ID
   # Testing of this ansible-role:
+script:
   - docker exec -ti $DOCKER_CONTAINER_ID /bin/sh -c "/$ROLETOTEST/tests/test-in-docker-image.sh"
+after_script:
   # Print some logs and other useful information for debugging travis:
   - >
     docker exec -ti $DOCKER_CONTAINER_ID /bin/sh -c 'echo -ne "------\nEND ANSIBLE TESTS\n------\nSystemD Units:\n------\n";
