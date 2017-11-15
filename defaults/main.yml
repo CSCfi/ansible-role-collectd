@@ -1,6 +1,8 @@
 ---
 # defaults file for ansible-role-collectd
 #
+collectd_interval: 60
+collectd_internal_stats: "true"
 collectd_manage_repos: True
 collectd_plugin_packages: []
 collectd_conf_dir: /etc/collectd.d

@@ -1,7 +1,7 @@
 # {{ ansible_managed }}
 ##
-CollectInternalStats true
-Interval 60
+CollectInternalStats true {{ collectd_internal_stats }}
+Interval {{ collectd_interval }}
 
 ###
 {% from 'encoder/macros/apache_encode_macro.j2' import apache_encode with context -%}
@@ -14,9 +14,8 @@ Interval 60
      convert_nums=true,
      quote_all_strings=true) }}
 ###
-
-# Set WriteThreads to 1 from default 5 in case we run an exec plugin
 {% if collectd_plugins_exec %}
+# Set WriteThreads to 1 from default 5 in case we run an exec plugin
 WriteThreads    1
 {% endif %}
 
