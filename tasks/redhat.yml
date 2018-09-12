@@ -33,6 +33,10 @@
     file: path=/usr/local/bin/ipmitool.sh owner=nobody group=nobody mode=0755
     when: ansible_virtualization_role != "guest" and collectd_ipmitool
 
+  - name: Make sure sudo is installed
+    package: name=sudo state=present
+    when: ansible_virtualization_role != "guest" and collectd_ipmitool
+
   - name: add sudoers rule for ipmitool
     template: src=sudo_collectd_ipmitool dest=/etc/sudoers.d/sudo_collectd_ipmitool owner=root group=root mode=0640
     when: ansible_virtualization_role != "guest" and collectd_ipmitool
@@ -64,11 +68,16 @@
 
   - name: enable and start collectd
     service: name=collectd state=started enabled=yes
+    when: ansible_connection != 'chroot'
+
+  - name: enable collectd in chroots
+    command: systemctl enable collectd
+    when: ansible_connection == 'chroot'
 
   - name: restart rsyslog if collectd_rsyslog_drop changed
     service: name=rsyslog state=restarted
-    when: collectd_rsyslog_drop.changed
+    when: collectd_rsyslog_drop.changed and ansible_connection != 'chroot'
 
   - name: restart collectd on configchange
     service: name=collectd state=restarted
-    when: collectd_config.changed
+    when: collectd_config.changed and ansible_connection != 'chroot'
