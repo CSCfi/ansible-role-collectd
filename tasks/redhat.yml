@@ -33,16 +33,12 @@
     file: path=/usr/local/bin/ipmitool.sh owner=nobody group=nobody mode=0755
     when: ansible_virtualization_role != "guest" and collectd_ipmitool
 
-  - name: Make sure sudo is installed
-    package: name=sudo state=present
+  - name: Make sure dependencies of ipmitools are installed
+    package: name="{{ collectd_ipmitool_packages }}" state=present
     when: ansible_virtualization_role != "guest" and collectd_ipmitool
 
   - name: add sudoers rule for ipmitool
     template: src=sudo_collectd_ipmitool dest=/etc/sudoers.d/sudo_collectd_ipmitool owner=root group=root mode=0640
-    when: ansible_virtualization_role != "guest" and collectd_ipmitool
-
-  - name: install ipmitool if virtualization role is not guest
-    package: name=ipmitool state=present
     when: ansible_virtualization_role != "guest" and collectd_ipmitool
 
   - name: install dcmi.sh on non guest hosts
@@ -55,10 +51,6 @@
 
   - name: add sudoers rule for freeipmi
     template: src=sudo_collectd_freeipmi dest=/etc/sudoers.d/sudo_collectd_freeipmi owner=root group=root mode=0640
-    when: ansible_virtualization_role != "guest" and collectd_ipmitool
-
-  - name: install freeipmi if virtualization role is not guest
-    package: name=freeipmi state=present
     when: ansible_virtualization_role != "guest" and collectd_ipmitool
 
   - name: when using exec plugin prevent value has been dispatched messages from reaching rsyslog
