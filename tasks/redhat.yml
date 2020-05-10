@@ -58,6 +58,16 @@
     register: collectd_rsyslog_drop
     when: (collectd_drop_rsyslog_spam and collectd_plugins_exec is defined) or (ansible_virtualization_role != "guest" and collectd_ipmitool|bool)
 
+  - name: Add memory-limit via systemd as collectd leaks memory
+    lineinfile:
+       path: /usr/lib/systemd/system/collectd.service
+       regexp: '^MemoryLimit='
+       line: "MemoryLimit={{ collectd_memory_limit }}"
+       insertafter: '^\[Service\]'
+       firstmatch: yes
+       state: present
+    notify: restart_collectd
+
   - name: enable and start collectd
     service: name=collectd state=started enabled=yes
     when: ansible_connection != 'chroot'

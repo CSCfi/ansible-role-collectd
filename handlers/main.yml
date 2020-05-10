@@ -1,0 +1,5 @@
+---
+
+- name: restart_collectd
+  systemd: name=collectd state=restarted daemon_reload=yes
+

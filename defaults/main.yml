@@ -26,6 +26,9 @@ collectd_precache: True
 # Extra rules for collectd prefix mangling
 collectd_prefix_rules: []
 
+# default systemd unit memory limit for this service
+collectd_memory_limit: "1536M"
+
 # Example: This mimics the old behaviour if you had
 # collectd_prefix_rules:
 #   - name: generic_prefix
