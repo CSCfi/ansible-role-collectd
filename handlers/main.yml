@@ -3,7 +3,7 @@
 - name: reload_collectd
   service:
    name: collectd
-   state: reload
+   state: reloaded
 
 - name: restart_collectd
   service:
