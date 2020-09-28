@@ -19,7 +19,7 @@
 
   - name: template in collectd.d/collectd.conf
     template: src=collectd.conf.j2 dest={{ collectd_conf_dir }}/collectd.conf owner=root mode=0644 backup=no
-    register: collectd_config
+    notify: restart_collectd
 
   - name: install the ipmitool.sh on non guest hosts
     get_url: owner=nobody group=nobody mode=0755 backup=yes 
@@ -55,7 +55,7 @@
 
   - name: when using exec plugin prevent value has been dispatched messages from reaching rsyslog
     template: src=collectd_rsyslog_drop.conf dest=/etc/rsyslog.d/10_collectd_drop.conf owner=root mode=0644 backup=no
-    register: collectd_rsyslog_drop
+    notify: restart_rsyslog
     when: (collectd_drop_rsyslog_spam and collectd_plugins_exec is defined) or (ansible_virtualization_role != "guest" and collectd_ipmitool|bool)
 
   - name: Add memory-limit via systemd as collectd leaks memory
@@ -66,20 +66,6 @@
        insertafter: '^\[Service\]'
        firstmatch: yes
        state: present
-    notify: restart_collectd
-
-  - name: enable and start collectd
-    service: name=collectd state=started enabled=yes
-    when: ansible_connection != 'chroot'
-
-  - name: enable collectd in chroots
-    command: systemctl enable collectd
-    when: ansible_connection == 'chroot'
-
-  - name: restart rsyslog if collectd_rsyslog_drop changed
-    service: name=rsyslog state=restarted
-    when: collectd_rsyslog_drop.changed and ansible_connection != 'chroot'
-
-  - name: restart collectd on configchange
-    service: name=collectd state=restarted
-    when: collectd_config.changed and ansible_connection != 'chroot'
+    notify:
+      - reload_collectd
+      - restart_collectd
