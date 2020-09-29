@@ -1,9 +1,10 @@
 ---
 
 - name: reload_collectd
-  service:
+  systemd:
    name: collectd
-   state: reloaded
+   daemon_reload: true
+   state: restarted
 
 - name: restart_collectd
   service:
