@@ -1,6 +1,6 @@
 ---
 
-- name: reload_collectd
+- name: restart_collectd_and_reload_systemd
   systemd:
    name: collectd
    daemon_reload: true

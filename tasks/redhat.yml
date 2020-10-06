@@ -67,4 +67,4 @@
        firstmatch: yes
        state: present
     notify:
-      - reload_collectd
+      - restart_collectd_and_reload_systemd
