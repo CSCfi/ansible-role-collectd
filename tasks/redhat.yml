@@ -68,3 +68,9 @@
        state: present
     notify:
       - restart_collectd_and_reload_systemd
+    when: ansible_connection != 'chroot'
+
+  # Doesn't collectd need to get restarted ever when using chroot?
+  - name: enable collectd in chroots
+    command: systemctl enable collectd
+    when: ansible_connection == 'chroot'

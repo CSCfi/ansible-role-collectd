@@ -1,18 +1,21 @@
 ---
-
+# Note, IDK why services should not get restarted when using chroot
 - name: restart_collectd_and_reload_systemd
   systemd:
-   name: collectd
-   daemon_reload: true
-   state: restarted
+    name: collectd
+    daemon_reload: true
+    state: restarted
+  when: ansible_connection != 'chroot'
 
 - name: restart_collectd
   service:
-   name: collectd
-   state: restarted
-   enabled: true
+    name: collectd
+    state: restarted
+    enabled: true
+  when: ansible_connection != 'chroot'
 
 - name: restart_rsyslog
   service:
     name: rsyslog
     state: restarted
+  when: ansible_connection != 'chroot'
