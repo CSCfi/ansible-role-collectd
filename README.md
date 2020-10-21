@@ -41,7 +41,7 @@ collectd_plugins_network:
           - Forward: True
         - sections:
           - name: Server
-            param: "{{ collectd_network_server_host }}"
+            param: "example.org"
             content:
               - options:
                 - SecurityLevel: Encrypt
